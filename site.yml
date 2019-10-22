@@ -1,0 +1,10 @@
+---
+- hosts: all
+  remote_user: root
+  gather_facts: false
+
+  roles:
+    - role: setup
+      vars:
+        create_user: kraag22
+        ports: ["22", "80", "443"]
