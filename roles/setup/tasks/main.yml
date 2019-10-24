@@ -44,7 +44,7 @@
   ufw:
     rule: allow
     port: "{{ item }}"
-  with_items: "{{ prohibit-password }}"
+  with_items: "{{ ports }}"
 
 - name: UFW - Deny all other incoming traffic by default
   ufw:

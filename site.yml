@@ -8,3 +8,15 @@
       vars:
         create_user: kraag22
         ports: ["22", "80", "443"]
+
+- hosts: ocean-test
+  gather_facts: true
+
+  roles:
+    - role: antoiner77.caddy
+      vars:
+        caddy_home: /srv/caddy
+        caddy_log_dir: /var/log/caddy
+        caddy_log_file: "{{ caddy_log_dir }}/caddy.log"
+        caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
+      become: true
