@@ -40,6 +40,9 @@
 - name: Install required system packages
   apt: name={{ sys_packages }} state=latest
 
+- pip:
+    name: docker
+
 - name: UFW - Allow connections to port
   ufw:
     rule: allow

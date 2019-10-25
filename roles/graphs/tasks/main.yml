@@ -1,0 +1,8 @@
+---
+- name: create mongo container
+  docker_container:
+    name: mongo
+    image: mongo
+    state: started    # absent, present, stopped
+    published_ports:
+      - '27017:27017'

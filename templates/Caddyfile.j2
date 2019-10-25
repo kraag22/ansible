@@ -1,6 +1,33 @@
-localhost:80
-tls martinbartusek@gmail.com
-ext .html
-root /srv/blog/_site
-log /var/log/caddy/kraag22.log
+# www.berlingame.cz, berlingame.cz {
+#   proxy / 127.0.0.1:2000
+#   log {{ caddy_log_dir }}/berlingame.log
+#   tls {{ tls_email }}
+# }
 
+# www.fazilion.com, fazilion.com {
+#   proxy / 127.0.0.1:4000
+#   log {{ caddy_log_dir }}/fazilion.log
+#   tls {{ tls_email }}
+#   timeouts 1m
+# }
+
+www.kraag22.com, kraag22.com {
+  # tls {{ tls_email }}
+  ext .html
+  root /srv/blog/_site
+  log {{ caddy_log_dir }}/kraag22.log
+}
+
+# analytics.kraag22.com {
+#   tls {{ tls_email }}
+#   proxy / http://157.230.21.215 {
+#     transparent
+#   }
+#   log {{ caddy_log_dir }}/analytics.log
+# }
+
+# www.gamarna.cz, gamarna.cz {
+#   tls {{ tls_email }}
+#   proxy / 127.0.0.1:3000
+#   log {{ caddy_log_dir }}/gamarna.log
+# }

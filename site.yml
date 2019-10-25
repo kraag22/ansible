@@ -11,12 +11,16 @@
 
 - hosts: ocean-test
   gather_facts: true
-
+  vars_files: "./variables/settings.yml"
   roles:
     - role: antoiner77.caddy
       vars:
         caddy_home: /srv/caddy
         caddy_log_dir: /var/log/caddy
         caddy_log_file: "{{ caddy_log_dir }}/caddy.log"
+        tls_email: "{{ email_address }}"
         caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
+      become: true
+
+    - role: graphs
       become: true
