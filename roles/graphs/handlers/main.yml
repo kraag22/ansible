@@ -1,0 +1,7 @@
+---
+# handlers file for graphs
+- name: restart graphs
+  systemd:
+    daemon_reload: true
+    name: graphs
+    state: restarted

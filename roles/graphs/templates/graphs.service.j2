@@ -1,0 +1,15 @@
+[Unit]
+Description=Graphs service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory={{ graphs_path }}
+ExecStart=/usr/bin/env node {{ graphs_path }}/app
+
+[Install]
+WantedBy=multi-user.target

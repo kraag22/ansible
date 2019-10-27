@@ -6,3 +6,32 @@
     state: started    # absent, present, stopped
     published_ports:
       - '27017:27017'
+
+- name: Creates directory
+  file:
+    path: "{{ graphs_path }}"
+    state: directory
+
+- git:
+    repo: "{{ github_repo }}"
+    dest: "{{ graphs_path }}"
+    force: true
+
+- name: Install packages based on package.json.
+  npm:
+    path: "{{ graphs_path }}"
+
+- name: Systemd service
+  template:
+    src: graphs.service.j2
+    dest: /etc/systemd/system/graphs.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart graphs
+
+- name: Start service
+  systemd:
+    name: graphs
+    state: started
+    enabled: true

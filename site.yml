@@ -22,5 +22,8 @@
         caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
       become: true
 
+    - role: geerlingguy.nodejs
+      become: true
+
     - role: graphs
       become: true
