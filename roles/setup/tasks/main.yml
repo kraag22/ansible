@@ -40,8 +40,18 @@
 - name: Install required system packages
   apt: name={{ sys_packages }} state=latest
 
+- name: Make alternative for Python 2
+  shell: update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+
+- name: Make alternative for Python 3
+  shell: update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
+
+- name: Make python 3 default
+  shell: update-alternatives --set python /usr/bin/python3.6
+
 - pip:
-    name: docker
+    name: ['docker', 'requests']
+    executable: pip3
 
 - name: UFW - Allow connections to port
   ufw:
