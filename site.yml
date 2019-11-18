@@ -8,6 +8,7 @@
       vars:
         create_user: kraag22
         ports: ["22", "80", "443"]
+      tags: setup
 
 - hosts: ocean-test
   gather_facts: true
@@ -18,12 +19,17 @@
         caddy_home: /srv/caddy
         caddy_log_dir: /var/log/caddy
         caddy_log_file: "{{ caddy_log_dir }}/caddy.log"
+        caddy_systemd_restart: "on-success"
+        caddy_systemd_capabilities_enabled: true
         tls_email: "{{ email_address }}"
         caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
       become: true
+      tags: caddy
 
     - role: geerlingguy.nodejs
       become: true
+      tags: node
 
     - role: graphs
       become: true
+      tags: graphs

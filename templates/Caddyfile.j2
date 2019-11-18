@@ -11,12 +11,12 @@
 #   timeouts 1m
 # }
 
-www.kraag22.com, kraag22.com {
-  # tls {{ tls_email }}
-  ext .html
-  root /srv/blog/_site
-  log {{ caddy_log_dir }}/kraag22.log
-}
+# www.kraag22.com, kraag22.com {
+#  tls {{ tls_email }}
+#  ext .html
+#  root /srv/blog/_site
+#  log {{ caddy_log_dir }}/kraag22.log
+# }
 
 # analytics.kraag22.com {
 #   tls {{ tls_email }}
@@ -26,8 +26,8 @@ www.kraag22.com, kraag22.com {
 #   log {{ caddy_log_dir }}/analytics.log
 # }
 
-# www.gamarna.cz, gamarna.cz {
-#   tls {{ tls_email }}
-#   proxy / 127.0.0.1:3000
-#   log {{ caddy_log_dir }}/gamarna.log
-# }
+www.gamarna.cz, gamarna.cz {
+  tls {{ tls_email }}
+  proxy / 127.0.0.1:{{ graphs_service_port }}
+  log {{ caddy_log_dir }}/gamarna.log
+}

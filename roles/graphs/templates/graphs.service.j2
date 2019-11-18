@@ -4,6 +4,7 @@ After=network.target
 StartLimitIntervalSec=0
 
 [Service]
+Environment="VCAP_APP_PORT={{ graphs_service_port }}"
 Type=simple
 Restart=always
 RestartSec=1
