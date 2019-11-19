@@ -11,12 +11,12 @@
 #   timeouts 1m
 # }
 
-# www.kraag22.com, kraag22.com {
-#  tls {{ tls_email }}
-#  ext .html
-#  root /srv/blog/_site
-#  log {{ caddy_log_dir }}/kraag22.log
-# }
+www.kraag22.com, kraag22.com {
+  tls {{ tls_email }}
+  ext .html
+  root {{ blog_path }}
+  log {{ caddy_log_dir }}/kraag22.log
+}
 
 # analytics.kraag22.com {
 #   tls {{ tls_email }}

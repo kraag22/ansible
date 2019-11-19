@@ -1,3 +1,4 @@
 ---
 email_address: "martinbartusek@gmail.com"
 graphs_service_port: 3000
+blog_path: /srv/blog/_site

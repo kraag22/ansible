@@ -13,6 +13,7 @@
 - hosts: ocean-test
   gather_facts: true
   vars_files: "./variables/settings.yml"
+  become: true
   roles:
     - role: antoiner77.caddy
       vars:
@@ -23,13 +24,13 @@
         caddy_systemd_capabilities_enabled: true
         tls_email: "{{ email_address }}"
         caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
-      become: true
       tags: caddy
 
     - role: geerlingguy.nodejs
-      become: true
       tags: node
 
     - role: graphs
-      become: true
       tags: graphs
+
+    - role: blog
+      tags: blog

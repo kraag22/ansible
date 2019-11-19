@@ -1,0 +1,19 @@
+---
+- name: Creates directory
+  file:
+    path: "{{ blog_path }}"
+    state: directory
+
+- name: Create dummy index file
+  template:
+    src: index.html.j2
+    dest: "{{ blog_path }}/index.html"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '/Users/kraag22/.ssh/deploy_travis.pub') }}"
