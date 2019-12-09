@@ -34,3 +34,6 @@
 
     - role: blog
       tags: blog
+
+    - role: berlingame
+      tags: berlingame

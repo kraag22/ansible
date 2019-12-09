@@ -1,0 +1,7 @@
+---
+# handlers file for graphs
+- name: restart berlingame
+  systemd:
+    daemon_reload: true
+    name: berlingame
+    state: restarted

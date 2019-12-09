@@ -1,0 +1,46 @@
+---
+- name: Creates directory
+  file:
+    path: "{{ berlingame_path }}"
+    state: directory
+
+- name: Creates compose directory
+  file:
+    path: "{{ compose_path }}"
+    state: directory
+
+- git:
+    repo: "{{ github_repo }}"
+    dest: "{{ berlingame_path }}"
+    force: true
+
+- name: Update berlingame php config
+  template:
+    src: config.php.j2
+    dest: "{{ berlingame_path }}/config/config.php"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Decker compose file
+  template:
+    src: compose.j2
+    dest: "{{ compose_path }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Systemd service
+  template:
+    src: berlingame.service.j2
+    dest: /etc/systemd/system/berlingame.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart berlingame
+
+- name: Start service
+  systemd:
+    name: berlingame
+    state: started
+    enabled: true

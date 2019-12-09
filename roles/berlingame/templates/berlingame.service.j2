@@ -1,0 +1,18 @@
+[Unit]
+Description=Berliname service
+Requires=docker.service
+After=docker.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=root
+
+WorkingDirectory={{ compose_path }}
+ExecStart=/usr/bin/env docker-compose up
+ExecStop=/usr/bin/docker-compose down -v
+
+[Install]
+WantedBy=multi-user.target

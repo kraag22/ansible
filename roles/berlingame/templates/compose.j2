@@ -1,0 +1,22 @@
+version: '3.2'
+
+services:
+
+    db:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: {{ berlingame_mysql_password }}
+        volumes:
+          - /srv/berlingame/mysql:/var/lib/mysql
+
+    adminer:
+        image: adminer
+        ports:
+          - 8080:8080
+
+    server:
+        image: kraag22/php-mysql:latest
+        ports:
+          - {{ berlingame_service_port }}:80
+        volumes:
+          - /srv/berlingame:/var/www/html/
