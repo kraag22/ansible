@@ -44,3 +44,10 @@
     name: berlingame
     state: started
     enabled: true
+
+- name: Run SQL import
+  import_role:
+    name: berlingame
+    tasks_from: import_sql
+  when: lookup('env','run_import')
+  tags: berlingame_import_sql
