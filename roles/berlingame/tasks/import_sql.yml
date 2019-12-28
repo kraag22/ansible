@@ -1,0 +1,34 @@
+---
+- name: Copy and uncompress DB backup file
+  unarchive:
+    src: "{{ lookup('env','HOME') + '/.ansible/bg.sql.zip' }}"
+    dest: /tmp
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Copy it inside container
+  shell: |
+    docker cp /tmp/bg.sql berlingame-compose_db_1:/tmp/
+
+- name: Import DB
+  shell: |
+    docker exec berlingame-compose_db_1 bash -l -c \
+    'mysql --password="{{ berlingame_mysql_password }}" < /tmp/bg.sql'
+
+- name: Create sql file
+  template:
+    src: import.sql.j2
+    dest: "/tmp/import.sql"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Copy it inside container
+  shell: |
+    docker cp /tmp/import.sql berlingame-compose_db_1:/tmp/
+
+- name: Run import sript
+  shell: |
+    docker exec berlingame-compose_db_1 bash -l -c \
+    'mysql --password="{{ berlingame_mysql_password }}" < /tmp/import.sql'

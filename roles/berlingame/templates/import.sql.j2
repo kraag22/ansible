@@ -1,0 +1,9 @@
+use mysql;
+
+DELETE FROM user WHERE User = 'admin';
+
+INSERT INTO `user` VALUES ('%','admin','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','N','','','','',0,0,0,0,'mysql_native_password','{{ berlingame_admin_native_password }}','N','2017-07-21 20:50:08',NULL,'N');
+
+GRANT SELECT ON *.* TO 'admin'@'%';
+
+FLUSH PRIVILEGES;
