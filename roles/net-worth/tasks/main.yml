@@ -1,0 +1,41 @@
+---
+- name: Creates directory
+  file:
+    path: "{{ net_worth_path }}/api"
+    state: directory
+
+- name: Creates log directory
+  file:
+    path: "/var/log/net-worth"
+    state: directory
+
+- name: Systemd service
+  template:
+    src: net-worth.service.j2
+    dest: /etc/systemd/system/net-worth.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart net-worth
+
+- name: Temp .js file
+  template:
+    src: helloworld.js.j2
+    dest: "{{ net_worth_path }}/api/helloworld.js"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Temp package.json file
+  template:
+    src: package.json
+    dest: "{{ net_worth_path }}/api/package.json"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start service
+  systemd:
+    name: net-worth
+    state: started
+    enabled: true

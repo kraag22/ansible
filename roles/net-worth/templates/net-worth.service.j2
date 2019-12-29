@@ -1,0 +1,16 @@
+[Unit]
+Description=net-worth service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Environment="PORT={{ net_worth_service_port }}"
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory={{ net_worth_path }}
+ExecStart=/usr/bin/env npm --prefix {{ net_worth_path }}/api run start /var/log/net-worth/node.log 2>&1
+
+[Install]
+WantedBy=multi-user.target

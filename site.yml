@@ -2,12 +2,18 @@
 - hosts: all
   remote_user: root
   gather_facts: false
-
+  vars_files: "./variables/settings.yml"
   roles:
     - role: setup
       vars:
         create_user: kraag22
-        ports: ["22", "80", "443"]
+        ports:
+          - "22"
+          - "80"
+          - "443"
+          # - "{{ graphs_service_port | string }}"
+          # - "{{ berlingame_service_port | string }}"
+          # - "{{ net_worth_service_port | string }}"
       tags: setup
 
 - hosts: ocean-test
@@ -37,3 +43,6 @@
 
     - role: berlingame
       tags: berlingame
+
+    - role: net-worth
+      tags: net-worth
