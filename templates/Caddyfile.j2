@@ -20,7 +20,7 @@ www.kraag22.com, kraag22.com {
 
 analytics.kraag22.com {
   tls {{ tls_email }}
-  proxy / http://157.230.21.215 {
+  proxy / http://{{ analytics_server_ip }} {
     transparent
   }
   log {{ caddy_log_dir }}/analytics.log

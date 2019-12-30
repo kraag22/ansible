@@ -39,3 +39,33 @@
     name: net-worth
     state: started
     enabled: true
+
+- name: Setup cron job import
+  cron:
+    name: net-worth import
+    minute: "05"
+    user: root
+    job: "curl -X POST localhost:{{ net_worth_service_port }}/import"
+
+- name: Setup cron job fill daily
+  cron:
+    name: net-worth fill
+    minute: "10"
+    hour: "0"
+    user: root
+    job: "curl -X PUT localhost:{{ net_worth_service_port }}/fill-daily"
+
+- name: Setup cron job for backup
+  cron:
+    name: net-worth backup
+    minute: "33"
+    user: root
+    job: "{{ backup_script_path }}"
+
+- name: Backup to dropbox script
+  template:
+    src: backup.sh.j2
+    dest: "{{ backup_script_path }}"
+    owner: root
+    group: root
+    mode: 0755

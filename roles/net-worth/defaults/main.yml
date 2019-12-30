@@ -1,2 +1,3 @@
 ---
 net_worth_path: /srv/net_worth
+backup_script_path: /srv/backup-net-worth.sh

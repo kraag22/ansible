@@ -45,6 +45,14 @@
     state: started
     enabled: true
 
+- name: Run job every midnight
+  cron:
+    name: berlingame midnight
+    minute: "0"
+    hour: "0"
+    user: root
+    job: "wget localhost:{{ berlingame_service_port }}/prepocet.php?heslo={{ prepocet_password }} > /dev/null"
+
 - name: Run SQL import
   import_role:
     name: berlingame
