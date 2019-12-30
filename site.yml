@@ -7,13 +7,6 @@
     - role: setup
       vars:
         create_user: kraag22
-        ports:
-          - "22"
-          - "80"
-          - "443"
-          # - "{{ graphs_service_port | string }}"
-          # - "{{ berlingame_service_port | string }}"
-          # - "{{ net_worth_service_port | string }}"
       tags: setup
 
 - hosts: ocean-test

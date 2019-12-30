@@ -52,15 +52,3 @@
 - pip:
     name: ['docker', 'requests']
     executable: pip3
-
-- name: UFW - Allow connections to port
-  ufw:
-    rule: allow
-    port: "{{ item }}"
-  with_items: "{{ ports }}"
-
-- name: UFW - Deny all other incoming traffic by default
-  ufw:
-    state: enabled
-    policy: deny
-    direction: incoming

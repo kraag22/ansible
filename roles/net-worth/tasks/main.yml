@@ -4,9 +4,14 @@
     path: "{{ net_worth_path }}/api"
     state: directory
 
+- name: Creates data directory
+  file:
+    path: "{{ net_worth_path }}/data"
+    state: directory
+
 - name: Creates log directory
   file:
-    path: "/var/log/net-worth"
+    path: "{{ net_worth_log_path }}"
     state: directory
 
 - name: Systemd service
@@ -17,6 +22,14 @@
     group: root
     mode: 0644
   notify: restart net-worth
+
+- name: Create .env file
+  template:
+    src: env.j2
+    dest: "{{ net_worth_path }}/.env"
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Temp .js file
   template:
