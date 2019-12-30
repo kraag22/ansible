@@ -21,6 +21,10 @@
   npm:
     path: "{{ graphs_path }}"
 
+- name: Install bower dependencies
+  shell: |
+    cd {{ graphs_path }} && npx bower install --allow-root
+
 - name: Systemd service
   template:
     src: graphs.service.j2
