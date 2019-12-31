@@ -39,6 +39,11 @@
     group: root
     mode: 0644
 
+- name: Check that the package.json exists
+  stat:
+    path: "{{ net_worth_path }}/api/package.json"
+  register: package_json_result
+
 - name: Temp package.json file
   template:
     src: package.json
@@ -46,6 +51,7 @@
     owner: root
     group: root
     mode: 0644
+  when: package_json_result.stat.exists == False
 
 - name: Start service
   systemd:
