@@ -9,6 +9,9 @@ install galaxy roles with
 
 ## Manual steps
 
+### Add/remove ansible host
+Look to file ```~/.ansible/hosts```
+
 ### Generate Berlingame DB backup
 
 ```
