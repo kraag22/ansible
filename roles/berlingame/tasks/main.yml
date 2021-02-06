@@ -14,6 +14,22 @@
     dest: "{{ berlingame_path }}"
     force: true
 
+- name: Allow write to logs
+  file:
+    dest: "{{ berlingame_path }}/log"
+    owner: root
+    group: root
+    mode: 0776
+    recurse: yes
+
+- name: Allow write to include
+  file:
+    dest: "{{ berlingame_path }}/include"
+    owner: root
+    group: root
+    mode: 0776
+    recurse: yes
+
 - name: Update berlingame php config
   template:
     src: config.php.j2
