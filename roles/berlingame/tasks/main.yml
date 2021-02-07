@@ -19,7 +19,7 @@
     dest: "{{ berlingame_path }}/log"
     owner: root
     group: root
-    mode: 0776
+    mode: 0777
     recurse: yes
 
 - name: Allow write to include
@@ -27,7 +27,7 @@
     dest: "{{ berlingame_path }}/include"
     owner: root
     group: root
-    mode: 0776
+    mode: 0777
     recurse: yes
 
 - name: Update berlingame php config
