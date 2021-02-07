@@ -26,6 +26,8 @@
       tags: caddy
 
     - role: geerlingguy.nodejs
+      vars:
+        nodejs_version: "14.x"
       tags: node
 
     - role: graphs
