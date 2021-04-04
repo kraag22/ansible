@@ -65,7 +65,7 @@
   cron:
     name: berlingame midnight
     minute: "0"
-    hour: "0"
+    hour: "23"
     user: root
     job: "wget localhost:{{ berlingame_service_port }}/prepocet.php?heslo={{ prepocet_password }} > /dev/null"
 
