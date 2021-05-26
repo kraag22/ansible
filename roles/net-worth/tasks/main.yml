@@ -63,6 +63,7 @@
   cron:
     name: net-worth import
     minute: "05"
+    hour: "*/4"
     user: root
     job: "curl -X POST localhost:{{ net_worth_service_port }}/import"
 
