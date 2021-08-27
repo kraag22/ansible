@@ -18,6 +18,14 @@
     dest: "{{ graphs_path }}"
     force: true
 
+- name: Create .env file
+  template:
+    src: env.j2
+    dest: "{{ graphs_path }}/.env"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Install packages based on package.json.
   npm:
     path: "{{ graphs_path }}"
