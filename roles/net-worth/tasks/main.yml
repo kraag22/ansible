@@ -75,6 +75,14 @@
     user: root
     job: "curl -X PUT localhost:{{ net_worth_service_port }}/fill-daily"
 
+- name: Setup cron job import reality
+  cron:
+    name: net-worth import reality
+    minute: "10"
+    hour: "1"
+    user: root
+    job: "curl -X GET localhost:{{ net_worth_service_port }}/reality/import"
+
 - name: Setup cron job for backup
   cron:
     name: net-worth backup
