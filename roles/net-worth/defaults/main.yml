@@ -2,3 +2,19 @@
 net_worth_path: /srv/net_worth
 net_worth_log_path: /var/log/net_worth
 backup_script_path: /srv/backup-net-worth.sh
+
+net_worth_user: "net-worth"
+net_worth_group: "net-worth"
+
+chrome_headless_dependencies:
+  - libnss3
+  - libatk-adaptor
+  - libcups2
+  - libxkbcommon-dev
+  - libxcomposite-dev
+  - libxdamage-dev
+  - libxrandr-dev
+  - libgbm-dev
+  - libcairo-dev
+  - libasound2
+  - libpango-1.0-0

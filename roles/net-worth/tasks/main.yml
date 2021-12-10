@@ -1,18 +1,41 @@
 ---
+- name: Install packages required by puppeteer (headless chrome)
+  apt: name={{ chrome_headless_dependencies }} state=latest
+
+- name: Make sure we have a group
+  group:
+    name: "{{ net_worth_group }}"
+    state: present
+
+- name: Create a user
+  user:
+    name: "{{ net_worth_user }}"
+    state: present
+    groups: "{{ net_worth_group }}"
+    append: true
+    create_home: true
+    shell: /bin/bash
+
 - name: Creates directory
   file:
     path: "{{ net_worth_path }}/api"
     state: directory
+    owner: "{{ net_worth_user }}"
+    group: "{{ net_worth_group }}"
 
 - name: Creates data directory
   file:
     path: "{{ net_worth_path }}/data"
     state: directory
+    owner: "{{ net_worth_user }}"
+    group: "{{ net_worth_group }}"
 
 - name: Creates log directory
   file:
     path: "{{ net_worth_log_path }}"
     state: directory
+    owner: "{{ net_worth_user }}"
+    group: "{{ net_worth_group }}"
 
 - name: Systemd service
   template:
@@ -27,16 +50,16 @@
   template:
     src: env.j2
     dest: "{{ net_worth_path }}/.env"
-    owner: root
-    group: root
+    owner: "{{ net_worth_user }}"
+    group: "{{ net_worth_group }}"
     mode: 0644
 
 - name: Temp .js file
   template:
     src: helloworld.js.j2
     dest: "{{ net_worth_path }}/api/helloworld.js"
-    owner: root
-    group: root
+    owner: "{{ net_worth_user }}"
+    group: "{{ net_worth_group }}"
     mode: 0644
 
 - name: Check that the package.json exists
@@ -48,8 +71,8 @@
   template:
     src: package.json
     dest: "{{ net_worth_path }}/api/package.json"
-    owner: root
-    group: root
+    owner: "{{ net_worth_user }}"
+    group: "{{ net_worth_group }}"
     mode: 0644
   when: package_json_result.stat.exists == False
 

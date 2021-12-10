@@ -8,7 +8,7 @@ Environment="PORT={{ net_worth_service_port }}"
 Type=simple
 Restart=always
 RestartSec=1
-User=root
+User={{ net_worth_user }}
 WorkingDirectory={{ net_worth_path }}
 ExecStart=/usr/bin/env npm --prefix {{ net_worth_path }}/api run start /var/log/net-worth/node.log 2>&1
 
