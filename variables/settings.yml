@@ -4,5 +4,4 @@ graphs_service_port: 3000
 blog_path: /srv/blog/_site
 berlingame_service_port: 2000
 net_worth_service_port: 4000
-analytics_server_ip: "157.230.21.215"
 plausible_port: 5000

@@ -27,15 +27,6 @@ www.kraag22.com, kraag22.com {
   }
 }
 
-analytics.kraag22.com {
-  tls {{ tls_email }}
-  reverse_proxy /* http://{{ analytics_server_ip }}
-  log {
-    format console
-    output file {{ caddy_log_dir }}/analytics.log
-  }
-}
-
 plausible.kraag22.com {
   reverse_proxy /* 127.0.0.1:5000
   log {
