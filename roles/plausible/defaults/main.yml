@@ -1,0 +1,4 @@
+---
+admin_username: "kraag22"
+plausible_install_dir: "/srv/plausible"
+clickhouse_version: "21.3"
