@@ -16,7 +16,7 @@
     docker exec berlingame-compose_db_1 bash -l -c \
     'mysql --password="{{ berlingame_mysql_password }}" < /tmp/bg.sql'
 
-- name: Create sql file
+- name: Create sql for granting permissions
   template:
     src: import.sql.j2
     dest: "/tmp/import.sql"
@@ -28,7 +28,7 @@
   shell: |
     docker cp /tmp/import.sql berlingame-compose_db_1:/tmp/
 
-- name: Run import sript
+- name: Run permissions sript
   shell: |
     docker exec berlingame-compose_db_1 bash -l -c \
     'mysql --password="{{ berlingame_mysql_password }}" < /tmp/import.sql'

@@ -1,33 +1,55 @@
 www.berlingame.cz, berlingame.cz {
-  proxy / 127.0.0.1:2000
-  log {{ caddy_log_dir }}/berlingame.log
+  reverse_proxy /* 127.0.0.1:2000
+  log {
+    format console
+    output file {{ caddy_log_dir }}/berlingame.log
+  }
   tls {{ tls_email }}
 }
 
 www.fazilion.com, fazilion.com {
-  proxy / 127.0.0.1:4000
-  log {{ caddy_log_dir }}/fazilion.log
+  reverse_proxy /* 127.0.0.1:4000
+  log {
+    format console
+    output file {{ caddy_log_dir }}/fazilion.log
+  }
   tls {{ tls_email }}
-  timeouts 1m
 }
 
 www.kraag22.com, kraag22.com {
   tls {{ tls_email }}
-  ext .html
-  root {{ blog_path }}
-  log {{ caddy_log_dir }}/kraag22.log
+  root * {{ blog_path }}
+  file_server
+  try_files {path}.html {path}
+  log {
+    format console
+    output file {{ caddy_log_dir }}/kraag22.log
+  }
 }
 
 analytics.kraag22.com {
   tls {{ tls_email }}
-  proxy / http://{{ analytics_server_ip }} {
-    transparent
+  reverse_proxy /* http://{{ analytics_server_ip }}
+  log {
+    format console
+    output file {{ caddy_log_dir }}/analytics.log
   }
-  log {{ caddy_log_dir }}/analytics.log
+}
+
+plausible.kraag22.com {
+  reverse_proxy /* 127.0.0.1:5000
+  log {
+    format console
+    output file {{ caddy_log_dir }}/plausible.log
+  }
+  tls {{ tls_email }}
 }
 
 www.gamarna.cz, gamarna.cz {
   tls {{ tls_email }}
-  proxy / 127.0.0.1:{{ graphs_service_port }}
-  log {{ caddy_log_dir }}/gamarna.log
+  reverse_proxy /* 127.0.0.1:{{ graphs_service_port }}
+  log {
+    format console
+    output file {{ caddy_log_dir }}/gamarna.log
+  }
 }

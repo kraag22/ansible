@@ -14,7 +14,7 @@
   vars_files: "./variables/settings.yml"
   become: true
   roles:
-    - role: antoiner77.caddy
+    - role: caddy-ansible
       vars:
         caddy_home: /srv/caddy
         caddy_log_dir: /var/log/caddy

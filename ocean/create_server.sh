@@ -1,8 +1,8 @@
 #!/bin/bash
 REGION=fra1
-SIZE=s-1vcpu-1gb
+SIZE=s-1vcpu-2gb
 NAME=ocean-test
-IMAGE=docker-18-04
+IMAGE=docker-20-04
 TAG=test-droplet
 TOKEN=( $(cat /Users/kraag22/.digitalocean.token) )
 
