@@ -1,13 +1,4 @@
 ---
-- name: create mongo container
-  docker_container:
-    name: mongo
-    image: mongo
-    state: started    # absent, present, stopped
-    restart_policy: unless-stopped
-    published_ports:
-      - '27017:27017'
-
 - name: Creates directory
   file:
     path: "{{ graphs_path }}"
