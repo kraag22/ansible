@@ -1,5 +1,6 @@
 www.berlingame.cz, berlingame.cz {
   reverse_proxy /* 127.0.0.1:2000
+  encode gzip
   log {
     format console
     output file {{ caddy_log_dir }}/berlingame.log
@@ -9,6 +10,7 @@ www.berlingame.cz, berlingame.cz {
 
 www.fazilion.com, fazilion.com {
   reverse_proxy /* 127.0.0.1:4000
+  encode gzip
   log {
     format console
     output file {{ caddy_log_dir }}/fazilion.log
@@ -21,6 +23,7 @@ www.kraag22.com, kraag22.com {
   root * {{ blog_path }}
   file_server
   try_files {path}.html {path}
+  encode gzip
   log {
     format console
     output file {{ caddy_log_dir }}/kraag22.log
@@ -29,6 +32,7 @@ www.kraag22.com, kraag22.com {
 
 plausible.kraag22.com {
   reverse_proxy /* 127.0.0.1:5000
+  encode gzip
   log {
     format console
     output file {{ caddy_log_dir }}/plausible.log
@@ -39,6 +43,7 @@ plausible.kraag22.com {
 www.gamarna.cz, gamarna.cz {
   tls {{ tls_email }}
   reverse_proxy /* 127.0.0.1:{{ graphs_service_port }}
+  encode gzip
   log {
     format console
     output file {{ caddy_log_dir }}/gamarna.log
