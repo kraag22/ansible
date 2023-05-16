@@ -2,3 +2,4 @@
 berlingame_path: /srv/berlingame
 compose_path: /srv/berlingame-compose
 github_repo: https://github.com/kraag22/berlingame.git
+cron_timezone: Europe/Prague
