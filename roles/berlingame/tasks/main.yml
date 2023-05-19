@@ -61,20 +61,13 @@
     state: started
     enabled: true
 
-- name: Set timezone for cron
-  ansible.builtin.cron:
-    name: CRON_TZ
-    env: yes
-    job: "{{ cron_timezone }}"
-
 - name: Run job every midnight
   ansible.builtin.cron:
     name: berlingame midnight
     minute: "0"
-    hour: "0"
+    hour: "22"
     user: root
     job: "wget localhost:{{ berlingame_service_port }}/prepocet.php?heslo={{ prepocet_password }} > /dev/null"
-
 
 - name: Run SQL import
   import_role:
