@@ -27,3 +27,21 @@ zip -r bg.sql.zip bg.sql
 run_import=true ./run.sh --tags berlingame_import_sql
 ```
 
+## Debugging
+
+### Disable UFW
+Disable default firewall with
+```
+ufw disable
+```
+
+### Verify that caddy works
+Firstly delete automatic tls downloading and add port `:80` to all websites
+configurations. It will allow to get http traffic.
+
+### Test with curl
+Use resolve param to set domain to desired IP address
+```
+curl -vv --resolve berlingame.cz:80:IP_ADDRESS http://berlingame.cz
+```
+This works from the server or from network
