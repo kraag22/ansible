@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/caddy-ansible/caddy-ansible.svg?branch=master)](https://travis-ci.org/caddy-ansible/caddy-ansible)
-[![Galaxy Role](https://img.shields.io/badge/ansible--galaxy-caddy-blue.svg)](https://galaxy.ansible.com/caddy_ansible/caddy_ansible/)
-
 # Caddy Ansible Role
 
 <!-- toc -->
@@ -8,15 +5,17 @@
 - [Dependencies](#dependencies)
 - [Role Variables](#role-variables)
   * [The Caddyfile](#the-caddyfile)
+  * [Whether to template the Caddyfile on each run](#whether-to-template-the-caddyfile-on-each-run)
   * [The OS to download caddy for](#the-os-to-download-caddy-for)
   * [Auto update Caddy?](#auto-update-caddy)
   * [Additional Available Packages](#additional-available-packages)
   * [Use `setcap`?](#use-setcap)
   * [Use systemd capabilities controls](#use-systemd-capabilities-controls)
-  * [Add additional environment variables](#add-additional-environment-variables)
+  * [Add additional environment variables or files](#add-additional-environment-variables-or-files)
   * [Use additional CLI arguments](#use-additional-cli-arguments)
   * [Use a GitHub OAuth token to request the list of caddy releases](#use-a-github-oauth-token-to-request-the-list-of-caddy-releases)
 - [Example Playbooks](#example-playbooks)
+- [Developing](#developing)
 - [Debugging](#debugging)
 - [Contributing](#contributing)
 
@@ -49,6 +48,14 @@ If you wish to use a template for the config you can do this:
 caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
 ```
 
+### Whether to template the Caddyfile on each run
+
+By default the Caddyfile is templated on each run. By setting this variable you can ensure the file is created on the first run but never updated after.
+
+```yaml
+caddy_config_update: true
+```
+
 ### The OS to download caddy for
 
 default:
@@ -68,6 +75,8 @@ caddy_update: true
 ### Additional Available Packages
 
 Changing this variable will reinstall Caddy with the new packages if `caddy_update` is enabled. Check https://caddyserver.com/download for available packages.
+
+This causes the builds to be downloaded from https://caddyserver.com rather than using the github releases. This service is provided for free by the Caddy maintainers and if you rely on it you should consider donating. The capacity of this service is limited so if you use this role to manage Caddy across many hosts it is recommended to use a different method.
 
 default:
 
@@ -104,9 +113,9 @@ Supported:
 
 RHEL/CentOS has no release that supports systemd capability controls at this time.
 
-### Add additional environment variables
+### Add additional environment variables or files
 
-Add environment variables to the systemd script.
+Add [environment variables](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Environment=) to the systemd script.
 
 default:
 
@@ -120,6 +129,21 @@ Example usage:
 caddy_environment_variables:
   FOO: bar
   SECONDVAR: spam
+```
+
+Add [environment files](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=) to the systemd script.
+
+default:
+
+```yaml
+caddy_environment_files: []
+```
+
+Example usage:
+
+```yaml
+caddy_environment_files:
+  - /etc/default/caddy_additional_env_file
 ```
 
 ### Use additional CLI arguments
@@ -190,6 +214,13 @@ Example with DigitalOcean DNS for TLS:
                 dns lego_deprecated digitalocean
             }
         }
+```
+
+## Developing
+
+```bash
+python3 -m pip install -U ansible ansible-lint yamllint molecule[docker] pytest testinfra
+PY_COLORS=1 ANSIBLE_FORCE_COLOR=1 MOLECULE_DISTRO=ubuntu2004 molecule test
 ```
 
 ## Debugging
