@@ -1,0 +1,14 @@
+---
+- name: Creates directory
+  file:
+    path: "{{ spolek_path }}"
+    state: directory
+
+- name: Create index file
+  template:
+    src: index.html.j2
+    dest: "{{ spolek_path }}/index.html"
+    owner: root
+    group: root
+    mode: 0644
+
