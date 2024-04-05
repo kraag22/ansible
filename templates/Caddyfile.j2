@@ -49,15 +49,3 @@ www.gamarna.cz, gamarna.cz {
     output file {{ caddy_log_dir }}/gamarna.log
   }
 }
-
-www.spolek-dreveneho-muze.cz, spolek-dreveneho-muze.cz {
-  tls {{ tls_email }}
-  root * {{ spolek_path }}
-  file_server
-  try_files {path}.html {path}
-  encode gzip
-  log {
-    format console
-    output file {{ caddy_log_dir }}/spolek.log
-  }
-}
