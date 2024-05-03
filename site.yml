@@ -44,6 +44,3 @@
 
     - role: plausible
       tags: plausible
-
-    - role: spolek
-      tags: spolek
