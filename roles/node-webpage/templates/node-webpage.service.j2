@@ -10,7 +10,7 @@ Restart=always
 RestartSec=1
 User={{ node_webpage_user }}
 WorkingDirectory={{ node_webpage_path }}
-ExecStart=/usr/bin/env npm --prefix {{ node_webpage_path }}/api run start /var/log/{{ node_webpage_service_name }}/node.log 2>&1
+ExecStart=/usr/bin/env npm --prefix {{ node_webpage_path }} run start /var/log/{{ node_webpage_service_name }}/node.log 2>&1
 
 [Install]
 WantedBy=multi-user.target

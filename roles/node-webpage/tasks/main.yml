@@ -13,16 +13,16 @@
     create_home: true
     shell: /bin/bash
 
-- name: Creates directory
+- name: Creates web directory
   file:
-    path: "{{ node_webpage_path }}/api"
+    path: "{{ node_webpage_path }}"
     state: directory
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
 
 - name: Creates data directory
   file:
-    path: "{{ node_webpage_path }}/data"
+    path: "{{ node_webpage_root }}/data"
     state: directory
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
@@ -46,7 +46,7 @@
 - name: Create .env file
   template:
     src: "env-{{ node_webpage_service_name }}.j2"
-    dest: "{{ node_webpage_path }}/.env"
+    dest: "{{ node_webpage_root }}/.env"
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
     mode: 0644
@@ -54,20 +54,20 @@
 - name: Temp .js file
   template:
     src: helloworld.js.j2
-    dest: "{{ node_webpage_path }}/api/helloworld.js"
+    dest: "{{ node_webpage_path }}/helloworld.js"
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
     mode: 0644
 
 - name: Check that the package.json exists
   stat:
-    path: "{{ node_webpage_path }}/api/package.json"
+    path: "{{ node_webpage_path }}/package.json"
   register: package_json_result
 
 - name: Temp package.json file
   template:
     src: package.json
-    dest: "{{ node_webpage_path }}/api/package.json"
+    dest: "{{ node_webpage_path }}/package.json"
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
     mode: 0644

@@ -6,4 +6,4 @@ curl -X POST https://content.dropboxapi.com/2/files/upload \
     --header "Authorization: Bearer {{ dropbox_token }}" \
     --header "Dropbox-API-Arg: {\"path\": \"/fazilion_$DATE.db\"}" \
     --header "Content-Type: application/octet-stream" \
-    --data-binary @{{ node_webpage_path }}/data/stocks.db
+    --data-binary @{{ node_webpage_root }}/data/{{ node_webpage_db_file_name }}

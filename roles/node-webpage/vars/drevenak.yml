@@ -1,4 +1,5 @@
 ---
+node_webpage_root: /srv/drevenak
 node_webpage_path: /srv/drevenak
 node_webpage_log_path: /var/log/drevenak
 node_webpage_backup_script_path: /srv/backup-drevenak.sh
@@ -6,3 +7,4 @@ node_webpage_user: "drevenak"
 node_webpage_group: "drevenak"
 node_webpage_service_name: drevenak
 node_webpage_service_port: "{{ drevenak_service_port }}"
+node_webpage_db_file_name: database.sqlite
