@@ -1,7 +1,0 @@
----
-# handlers file for net-worth
-- name: restart net-worth
-  systemd:
-    daemon_reload: true
-    name: net-worth
-    state: restarted

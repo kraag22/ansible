@@ -2,89 +2,13 @@
 - name: Install packages required by puppeteer (headless chrome)
   apt: name={{ chrome_headless_dependencies }} state=latest
 
-- name: Make sure we have a group
-  group:
-    name: "{{ net_worth_group }}"
-    state: present
-
-- name: Create a user
-  user:
-    name: "{{ net_worth_user }}"
-    state: present
-    groups: "{{ net_worth_group }}"
-    append: true
-    create_home: true
-    shell: /bin/bash
-
-- name: Creates directory
-  file:
-    path: "{{ net_worth_path }}/api"
-    state: directory
-    owner: "{{ net_worth_user }}"
-    group: "{{ net_worth_group }}"
-
-- name: Creates data directory
-  file:
-    path: "{{ net_worth_path }}/data"
-    state: directory
-    owner: "{{ net_worth_user }}"
-    group: "{{ net_worth_group }}"
-
-- name: Creates log directory
-  file:
-    path: "{{ net_worth_log_path }}"
-    state: directory
-    owner: "{{ net_worth_user }}"
-    group: "{{ net_worth_group }}"
-
-- name: Systemd service
-  template:
-    src: net-worth.service.j2
-    dest: /etc/systemd/system/net-worth.service
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart net-worth
-
-- name: Create .env file
-  template:
-    src: env.j2
-    dest: "{{ net_worth_path }}/.env"
-    owner: "{{ net_worth_user }}"
-    group: "{{ net_worth_group }}"
-    mode: 0644
-
-- name: Temp .js file
-  template:
-    src: helloworld.js.j2
-    dest: "{{ net_worth_path }}/api/helloworld.js"
-    owner: "{{ net_worth_user }}"
-    group: "{{ net_worth_group }}"
-    mode: 0644
-
-- name: Check that the package.json exists
-  stat:
-    path: "{{ net_worth_path }}/api/package.json"
-  register: package_json_result
-
-- name: Temp package.json file
-  template:
-    src: package.json
-    dest: "{{ net_worth_path }}/api/package.json"
-    owner: "{{ net_worth_user }}"
-    group: "{{ net_worth_group }}"
-    mode: 0644
-  when: package_json_result.stat.exists == False
-
-- name: Start service
-  systemd:
-    name: net-worth
-    state: started
-    enabled: true
+- import_role:
+    name: node-webpage
+    vars_from: "net-worth"
 
 - name: Setup cron job import
   cron:
-    name: net-worth import
+    name: "net-worth import"
     minute: "05"
     hour: "*/12"
     user: root
@@ -92,7 +16,7 @@
 
 - name: Setup cron job fill daily
   cron:
-    name: net-worth fill
+    name: "net-worth fill"
     minute: "10"
     hour: "0"
     user: root
@@ -100,31 +24,8 @@
 
 - name: Setup cron job import reality
   cron:
-    name: net-worth import reality
+    name: "net-worth import reality"
     minute: "10"
     hour: "1"
     user: root
     job: "curl -X GET localhost:{{ net_worth_service_port }}/reality/import"
-
-- name: Setup cron job for backup
-  cron:
-    name: net-worth backup
-    minute: "33"
-    user: root
-    job: "{{ backup_script_path }}"
-
-- name: Backup to dropbox script
-  template:
-    src: backup.sh.j2
-    dest: "{{ backup_script_path }}"
-    owner: root
-    group: root
-    mode: 0755
-
-- name: Setup logrotate for net-worth
-  template:
-    src: logrotate.j2
-    dest: /etc/logrotate.d/net-worth
-    owner: root
-    group: root
-    mode: 0644

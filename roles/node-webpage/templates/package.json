@@ -1,5 +1,5 @@
 {
-  "name": "net-worth",
+  "name": "{{ node_webpage_service_name }}",
   "version": "1.0.0",
   "description": "",
   "main": "helloworld.js",

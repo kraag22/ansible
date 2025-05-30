@@ -1,0 +1,7 @@
+---
+# handlers file for {{ node_webpage_service_name }}
+- name: restart {{ node_webpage_service_name }}
+  systemd:
+    daemon_reload: true
+    name: "{{ node_webpage_service_name }}"
+    state: restarted
