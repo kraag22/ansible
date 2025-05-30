@@ -1,0 +1,11 @@
+{{ node_webpage_log_path }}/info.log
+{{ node_webpage_log_path }}/error.log
+{{ node_webpage_log_path }}/execptions.log
+{
+  rotate 10
+  weekly
+  missingok
+  notifempty
+  delaycompress
+  compress
+}
