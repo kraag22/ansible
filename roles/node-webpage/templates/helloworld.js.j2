@@ -5,7 +5,7 @@ const port = {{ node_webpage_service_port }};
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Deploy {{ node_webpage_service_name }} via travis-ci\n');
+  res.end('Deploy {{ node_webpage_service_name }} via git automatic deployment\n');
 });
 
 server.listen(port, () => {

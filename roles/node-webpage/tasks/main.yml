@@ -45,7 +45,7 @@
 
 - name: Create .env file
   template:
-    src: env.j2
+    src: "env-{{ node_webpage_service_name }}.j2"
     dest: "{{ node_webpage_path }}/.env"
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
