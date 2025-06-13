@@ -47,3 +47,27 @@
 
     - role: plausible
       tags: plausible
+
+- hosts: hetzner
+  gather_facts: true
+  vars_files: "./variables/settings.yml"
+  become: true
+  roles:
+    - role: caddy-ansible
+      vars:
+        caddy_home: /srv/caddy
+        caddy_log_dir: /var/log/caddy
+        caddy_log_file: "{{ caddy_log_dir }}/caddy.log"
+        caddy_systemd_restart: "on-success"
+        caddy_systemd_capabilities_enabled: true
+        tls_email: "{{ email_address }}"
+        caddy_config: "{{ lookup('template', 'templates/Caddyfile.hetzner.j2') }}"
+      tags: caddy
+
+    # - role: geerlingguy.nodejs
+    #   vars:
+    #     nodejs_version: "23.x"
+    #   tags: node
+
+    - role: drevenak
+      tags: drevenak

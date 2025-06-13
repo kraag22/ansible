@@ -6,3 +6,7 @@ berlingame_service_port: 2000
 net_worth_service_port: 4000
 plausible_port: 5000
 drevenak_service_port: 3500
+
+drevenak_path: /srv/drevenak
+drevenak_user: "drevenak"
+drevenak_group: "drevenak"

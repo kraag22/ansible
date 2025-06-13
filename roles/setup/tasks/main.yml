@@ -40,15 +40,17 @@
 - name: Install required system packages
   apt: name={{ sys_packages }} state=latest
 
-- name: Make alternative for Python 2
-  shell: update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+- name: Ensure required packages for venv
+  apt:
+    name:
+      - python3-pip
+      - python3-venv
+      - python3-full
+    state: present
+    update_cache: yes
 
-- name: Make alternative for Python 3
-  shell: update-alternatives --install /usr/bin/python python /usr/bin/python{{python3_version}} 2
+- name: Create a virtual environment
+  command: python3 -m venv /opt/pyenv
 
-- name: Make python 3 default
-  shell: update-alternatives --set python /usr/bin/python{{python3_version}}
-
-- pip:
-    name: ['docker', 'requests']
-    executable: pip3
+- name: Install Python packages inside venv
+  command: /opt/pyenv/bin/pip install docker requests

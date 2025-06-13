@@ -40,16 +40,6 @@ plausible.kraag22.com {
   tls {{ tls_email }}
 }
 
-drevenak.kraag22.com {
-  reverse_proxy /* 127.0.0.1:3500
-  encode gzip
-  log {
-    format console
-    output file {{ caddy_log_dir }}/drevenak.log
-  }
-  tls {{ tls_email }}
-}
-
 www.gamarna.cz, gamarna.cz {
   tls {{ tls_email }}
   reverse_proxy /* 127.0.0.1:{{ graphs_service_port }}

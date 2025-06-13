@@ -3,3 +3,26 @@
     name: node-webpage
     vars_from: "drevenak"
 
+- name: Creates tmp uploads directory
+  file:
+    path: "{{ drevenak_path }}/tmp_uploads"
+    state: directory
+    owner: "{{ drevenak_user }}"
+    group: "{{ drevenak_group }}"
+    mode: "0775"
+
+- name: Creates public directory
+  file:
+    path: "{{ drevenak_path }}/public"
+    state: directory
+    owner: "{{ drevenak_user }}"
+    group: "{{ drevenak_group }}"
+    mode: "0775"
+
+- name: Creates public uploads directory
+  file:
+    path: "{{ drevenak_path }}/public/uploads"
+    state: directory
+    owner: "{{ drevenak_user }}"
+    group: "{{ drevenak_group }}"
+    mode: "0775"

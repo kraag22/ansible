@@ -1,0 +1,9 @@
+drevenak-luka.cz, www.drevenak-luka.cz {
+  reverse_proxy /* 127.0.0.1:3500
+  encode gzip
+  log {
+    format console
+    output file {{ caddy_log_dir }}/drevenak.log
+  }
+  tls {{ tls_email }}
+}
