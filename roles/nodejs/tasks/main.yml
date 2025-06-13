@@ -1,0 +1,12 @@
+---
+- name: Add NodeSource APT repository
+  shell: curl -fsSL https://deb.nodesource.com/setup_{{ nodejs_version }} | bash -
+  args:
+    executable: /bin/bash
+  register: nodesource_setup
+  changed_when: "'already' not in nodesource_setup.stdout"
+
+- name: Install Node.js and npm
+  apt:
+    name: nodejs
+    state: present

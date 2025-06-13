@@ -64,10 +64,8 @@
         caddy_config: "{{ lookup('template', 'templates/Caddyfile.hetzner.j2') }}"
       tags: caddy
 
-    # - role: geerlingguy.nodejs
-    #   vars:
-    #     nodejs_version: "23.x"
-    #   tags: node
+    - role: nodejs
+      tags: node
 
     - role: drevenak
       tags: drevenak
