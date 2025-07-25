@@ -1,0 +1,11 @@
+---
+node_webpage_root: /srv/reality_scrapper
+node_webpage_path: /srv/reality_scrapper/api
+node_webpage_log_path: /var/log/reality_scrapper
+node_webpage_user: "reality-scrapper"
+node_webpage_group: "reality-scrapper"
+node_webpage_service_name: reality-scrapper
+node_webpage_service_port: "4100"
+node_webpage_db_file_name: reality.db
+node_webpage_git_repository: https://github.com/kraag22/net-worth.git
+install_npm_deps: true

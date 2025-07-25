@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: ocean, hetzner
   remote_user: root
   gather_facts: false
   vars_files: "./variables/settings.yml"
@@ -69,3 +69,14 @@
 
     - role: drevenak
       tags: drevenak
+
+- hosts: diblik
+  gather_facts: true
+  vars_files: "./variables/settings.yml"
+  become: true
+  roles:
+    - role: nodejs
+      tags: node
+
+    - role: reality-scrapper
+      tags: reality-scrapper

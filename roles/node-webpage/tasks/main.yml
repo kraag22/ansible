@@ -15,6 +15,24 @@
 
 - name: Creates web directory
   file:
+    path: "{{ node_webpage_root }}"
+    state: directory
+    owner: "{{ node_webpage_user }}"
+    group: "{{ node_webpage_group }}"
+
+- name: Clone the repository
+  git:
+    repo: "{{ node_webpage_git_repository }}"
+    dest: "/srv/reality_scrapper/"
+    version: "master"
+    update: yes
+    force: yes
+  become: yes
+  become_user: "{{ node_webpage_user }}"
+  when: node_webpage_git_repository is defined
+
+- name: Creates web directory
+  file:
     path: "{{ node_webpage_path }}"
     state: directory
     owner: "{{ node_webpage_user }}"
@@ -73,6 +91,14 @@
     mode: 0644
   when: package_json_result.stat.exists == False
 
+- name: Install npm dependencies
+  shell: npm install
+  args:
+    chdir: "{{ node_webpage_path }}"
+  become: yes
+  become_user: "{{ node_webpage_user }}"
+  when: install_npm_deps is defined
+
 - name: Start service
   systemd:
     name: "{{ node_webpage_service_name }}"
@@ -85,6 +111,7 @@
     minute: "33"
     user: root
     job: "{{ node_webpage_backup_script_path }}"
+  when: node_webpage_backup_script_path is defined
 
 - name: Backup to dropbox script
   template:
@@ -93,6 +120,7 @@
     owner: root
     group: root
     mode: 0755
+  when: node_webpage_backup_script_path is defined
 
 - name: Setup logrotate for {{ node_webpage_service_name }}
   template:
@@ -101,3 +129,4 @@
     owner: root
     group: root
     mode: 0644
+  when: node_webpage_backup_script_path is defined

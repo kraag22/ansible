@@ -1,0 +1,15 @@
+---
+- name: Install packages required by puppeteer (headless chrome)
+  apt: name={{ chrome_headless_dependencies }} state=latest
+
+- import_role:
+    name: node-webpage
+    vars_from: "reality-scrapper"
+
+- name: Setup cron job import reality
+  cron:
+    name: "net-worth import reality"
+    minute: "10"
+    hour: "1"
+    user: root
+    job: "curl -X GET localhost:{{ net_worth_service_port }}/reality/import"
