@@ -1,0 +1,13 @@
+---
+node_webpage_root: "{{ quests_path }}"
+node_webpage_path: "{{ quests_path }}"
+node_webpage_log_path: /var/log/quests
+node_webpage_backup_script_path: /srv/backup-quests.sh
+node_webpage_user: "{{ quests_user }}"
+node_webpage_group: "{{ quests_group }}"
+node_webpage_service_name: quests
+node_webpage_service_port: "{{ quests_service_port }}"
+node_webpage_db_file_name: quests.sqlite
+node_webpage_git_repository: git@github.com:kraag22/quests.git
+node_webpage_git_deploy_key: "{{ quests_git_deploy_key }}"
+install_npm_deps: true

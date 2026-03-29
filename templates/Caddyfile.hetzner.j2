@@ -7,3 +7,13 @@ drevenak-luka.cz, www.drevenak-luka.cz {
   }
   tls {{ tls_email }}
 }
+
+serosvet.cz, www.serosvet.cz {
+  reverse_proxy /* 127.0.0.1:{{ quests_service_port }}
+  encode gzip
+  log {
+    format console
+    output file {{ caddy_log_dir }}/quests.log
+  }
+  tls {{ tls_email }}
+}

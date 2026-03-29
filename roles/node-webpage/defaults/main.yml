@@ -1,1 +1,6 @@
 ---
+node_webpage_git_checkout_path: "/srv/.git-checkouts/{{ node_webpage_service_name }}"
+node_webpage_git_version: master
+node_webpage_git_accept_hostkey: true
+node_webpage_git_ssh_dir: "/home/{{ node_webpage_user }}/.ssh"
+node_webpage_git_key_file: "{{ node_webpage_git_ssh_dir }}/id_ed25519"

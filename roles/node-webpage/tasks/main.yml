@@ -20,15 +20,65 @@
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
 
-- name: Clone the repository
+- name: Create SSH directory for repository deploy key
+  file:
+    path: "{{ node_webpage_git_ssh_dir }}"
+    state: directory
+    owner: "{{ node_webpage_user }}"
+    group: "{{ node_webpage_group }}"
+    mode: "0700"
+  when:
+    - node_webpage_git_repository is defined
+    - node_webpage_git_deploy_key is defined
+
+- name: Install repository deploy key
+  copy:
+    content: "{{ node_webpage_git_deploy_key }}"
+    dest: "{{ node_webpage_git_key_file }}"
+    owner: "{{ node_webpage_user }}"
+    group: "{{ node_webpage_group }}"
+    mode: "0600"
+  no_log: true
+  when:
+    - node_webpage_git_repository is defined
+    - node_webpage_git_deploy_key is defined
+
+- name: Ensure rsync is installed
+  package:
+    name: rsync
+    state: present
+  when: node_webpage_git_repository is defined
+
+- name: Create parent directory for staged repository checkout
+  file:
+    path: "{{ node_webpage_git_checkout_path | dirname }}"
+    state: directory
+    owner: "{{ node_webpage_user }}"
+    group: "{{ node_webpage_group }}"
+    mode: "0755"
+  when: node_webpage_git_repository is defined
+
+- name: Update the staged repository checkout
   git:
     repo: "{{ node_webpage_git_repository }}"
-    dest: "/srv/reality_scrapper/"
-    version: "master"
+    dest: "{{ node_webpage_git_checkout_path }}"
+    version: "{{ node_webpage_git_version }}"
     update: yes
     force: yes
+    accept_hostkey: "{{ node_webpage_git_accept_hostkey }}"
+    key_file: "{{ node_webpage_git_key_file if node_webpage_git_deploy_key is defined else omit }}"
   become: yes
   become_user: "{{ node_webpage_user }}"
+  when: node_webpage_git_repository is defined
+
+- name: Synchronize repository files into application directory
+  command:
+    argv:
+      - rsync
+      - -a
+      - --exclude=.git/
+      - "{{ node_webpage_git_checkout_path }}/"
+      - "{{ node_webpage_root }}/"
   when: node_webpage_git_repository is defined
 
 - name: Creates web directory
