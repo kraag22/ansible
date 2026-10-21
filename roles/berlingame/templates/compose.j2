@@ -15,7 +15,7 @@ services:
           - 8080:8080
 
     server:
-        image: kraag22/php-mysql:latest
+        build: /srv/berlingame/docker/php-mysql
         ports:
           - {{ berlingame_service_port }}:80
         volumes:

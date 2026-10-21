@@ -9,10 +9,14 @@
     path: "{{ compose_path }}"
     state: directory
 
-- git:
+- name: Update application source
+  git:
     repo: "{{ github_repo }}"
     dest: "{{ berlingame_path }}"
+    version: master
     force: true
+  register: berlingame_checkout
+  notify: restart berlingame
 
 - name: Allow write to logs
   file:
@@ -38,13 +42,15 @@
     group: root
     mode: 0644
 
-- name: Decker compose file
+- name: Update Compose file
   template:
     src: compose.j2
     dest: "{{ compose_path }}/docker-compose.yml"
     owner: root
     group: root
     mode: 0644
+  register: berlingame_compose
+  notify: restart berlingame
 
 - name: Systemd service
   template:
@@ -53,7 +59,20 @@
     owner: root
     group: root
     mode: 0644
+  register: berlingame_unit
   notify: restart berlingame
+
+# Build before stopping the running service, so a failed build leaves it running.
+- name: Build PHP image
+  command: docker compose build --pull server
+  args:
+    chdir: "{{ compose_path }}"
+  when: berlingame_checkout.changed or berlingame_compose.changed or berlingame_unit.changed
+  changed_when: true
+  notify: restart berlingame
+
+- name: Apply service changes before continuing
+  meta: flush_handlers
 
 - name: Start service
   systemd:
@@ -73,5 +92,5 @@
   import_role:
     name: berlingame
     tasks_from: import_sql
-  when: lookup('env','run_import')
+  when: lookup('env', 'run_import') | bool
   tags: berlingame_import_sql

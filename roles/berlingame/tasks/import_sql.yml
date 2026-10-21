@@ -7,14 +7,13 @@
     group: root
     mode: 0777
 
-- name: Copy it inside container
-  shell: |
-    docker cp /tmp/bg.sql berlingame-compose_db_1:/tmp/
-
 - name: Import DB
-  shell: |
-    docker exec berlingame-compose_db_1 bash -l -c \
-    'mysql --password="{{ berlingame_mysql_password }}" < /tmp/bg.sql'
+  shell: docker compose exec -T -e MYSQL_PWD db mysql -uroot < /tmp/bg.sql
+  args:
+    chdir: "{{ compose_path }}"
+  environment:
+    MYSQL_PWD: "{{ berlingame_mysql_password }}"
+  no_log: true
 
 - name: Create sql for granting permissions
   template:
@@ -24,11 +23,10 @@
     group: root
     mode: 0777
 
-- name: Copy it inside container
-  shell: |
-    docker cp /tmp/import.sql berlingame-compose_db_1:/tmp/
-
-- name: Run permissions sript
-  shell: |
-    docker exec berlingame-compose_db_1 bash -l -c \
-    'mysql --password="{{ berlingame_mysql_password }}" < /tmp/import.sql'
+- name: Run permissions script
+  shell: docker compose exec -T -e MYSQL_PWD db mysql -uroot < /tmp/import.sql
+  args:
+    chdir: "{{ compose_path }}"
+  environment:
+    MYSQL_PWD: "{{ berlingame_mysql_password }}"
+  no_log: true

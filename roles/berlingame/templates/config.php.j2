@@ -71,8 +71,8 @@ $RECAPTCHA_SITEKEY = '{{ recaptcha_sitekey }}';
 
 //-------------------PREPOCET--------------------
 
-$lockfile = "${DIR_LOG}prepocet.lock";
-$secondlock = "${DIR_LOG}prepocet.second.lock";
+$lockfile = "{$DIR_LOG}prepocet.lock";
+$secondlock = "{$DIR_LOG}prepocet.second.lock";
 $PREPOCET_HESLO = '{{ prepocet_password }}';
 if (file_exists($lockfile)) {
     echo '<html><head>
