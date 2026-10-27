@@ -1,2 +1,5 @@
-- src: geerlingguy.nodejs
-  version: 5.1.1
+---
+roles: []
+collections:
+  - name: ansible.posix
+  - name: community.general

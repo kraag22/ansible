@@ -1,12 +1,59 @@
 ---
-- name: Add NodeSource APT repository
-  shell: curl -fsSL https://deb.nodesource.com/setup_{{ nodejs_version }} | bash -
-  args:
-    executable: /bin/bash
-  register: nodesource_setup
-  changed_when: "'already' not in nodesource_setup.stdout"
+- name: Find legacy NodeSource repository files
+  ansible.builtin.find:
+    paths: /etc/apt/sources.list.d
+    patterns:
+      - nodesource.list
+      - deb_nodesource_com_node_*.list
+  register: nodejs_legacy_repositories
 
-- name: Install Node.js and npm
-  apt:
-    name: nodejs
+- name: Remove legacy NodeSource repository files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ nodejs_legacy_repositories.files }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Install repository and native addon build prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - python3-debian
+      - python3
+      - build-essential
     state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Configure the NodeSource repository
+  ansible.builtin.deb822_repository:
+    name: nodesource
+    types: [deb]
+    uris: "https://deb.nodesource.com/node_{{ nodejs_version }}"
+    suites: [nodistro]
+    components: [main]
+    architectures: "{{ ['amd64'] if ansible_facts['architecture'] == 'x86_64' else ['arm64'] }}"
+    signed_by: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+    state: present
+
+- name: Install the selected Node.js major and bundled npm
+  ansible.builtin.apt:
+    name: "nodejs={{ nodejs_version | replace('x', '*') }}"
+    state: latest
+    allow_downgrade: false
+    update_cache: true
+
+- name: Read the installed Node.js version
+  ansible.builtin.command: /usr/bin/node --version
+  register: nodejs_installed_version
+  changed_when: false
+  when: not ansible_check_mode
+
+- name: Verify the installed Node.js major and minimum version
+  ansible.builtin.assert:
+    that:
+      - nodejs_installed_version.stdout.startswith('v' ~ nodejs_version.split('.')[0] ~ '.')
+      - nodejs_installed_version.stdout[1:] is version(nodejs_minimum_version, '>=', version_type='semver')
+    fail_msg: "The installed Node.js must match {{ nodejs_version }} and be at least {{ nodejs_minimum_version }}."
+  when: not ansible_check_mode

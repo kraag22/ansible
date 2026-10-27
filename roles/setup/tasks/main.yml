@@ -33,6 +33,8 @@
     state: present
     regexp: '^#?PermitRootLogin'
     line: 'PermitRootLogin prohibit-password'
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: Reload SSH
 
 - name: Update apt
   apt: update_cache=yes
@@ -49,8 +51,11 @@
     state: present
     update_cache: yes
 
-- name: Create a virtual environment
-  command: python3 -m venv /opt/pyenv
-
 - name: Install Python packages inside venv
-  command: /opt/pyenv/bin/pip install docker requests
+  ansible.builtin.pip:
+    name:
+      - docker
+      - requests
+    state: present
+    virtualenv: /opt/pyenv
+    virtualenv_command: python3 -m venv

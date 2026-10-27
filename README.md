@@ -1,10 +1,28 @@
 # Init
 
-install galaxy roles with 
+Create the local Ansible environment and install the required collections:
 
+```sh
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python 'ansible-core>=2.19,<2.20'
+.venv/bin/ansible-galaxy collection install -r requirements.yml
 ```
-    ansible-galaxy install -r requirements.yml
+
+`run.sh` uses `.venv/bin/ansible-playbook` directly, so activation is unnecessary.
+Ansible Core 2.19 supports the Python 3.8 system interpreter on `ocean`.
+
+## Node.js
+
+The local `nodejs` role installs the latest Node.js 26.x and bundled npm from
+the signed NodeSource APT repository, then verifies Node.js is at least 26.12.1.
+It requires Ansible Core 2.15+ and a supported amd64/arm64 Debian or Ubuntu host.
+
+```sh
+./run.sh --tags node --limit hetzner
 ```
+
+After a runtime upgrade, rebuild native application dependencies if needed and
+restart the affected services to use the new Node.js version.
 
 
 ## Manual steps

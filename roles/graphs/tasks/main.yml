@@ -22,8 +22,15 @@
     path: "{{ graphs_path }}"
 
 - name: Install bower dependencies
-  shell: |
-    cd {{ graphs_path }} && npx bower install --allow-root
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/npx
+      - --yes
+      - bower
+      - install
+      - --allow-root
+      - --config.interactive=false
+    chdir: "{{ graphs_path }}"
 
 - name: Systemd service
   template:
