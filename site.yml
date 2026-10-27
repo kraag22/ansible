@@ -25,9 +25,7 @@
         caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
       tags: caddy
 
-    - role: geerlingguy.nodejs
-      vars:
-        nodejs_version: "14.x"
+    - role: nodejs
       tags: node
 
     - role: graphs
