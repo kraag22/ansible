@@ -80,13 +80,18 @@
     state: started
     enabled: true
 
-- name: Run job every midnight
+# Check Prague time explicitly; the host cron daemon uses the host timezone.
+# Escape % because cron treats an unescaped % as a newline, even inside quotes.
+- name: Run job at Prague midnight throughout the year
   ansible.builtin.cron:
     name: berlingame midnight
     minute: "0"
-    hour: "22"
+    hour: "*"
     user: root
-    job: "wget localhost:{{ berlingame_service_port }}/prepocet.php?heslo={{ prepocet_password }} > /dev/null"
+    job: >-
+      if [ "$(TZ={{ cron_timezone | quote }} date +\%H)" = "00" ]; then
+      wget -O /dev/null {{ ('http://localhost:' ~ berlingame_service_port ~ '/prepocet.php?heslo=' ~ (prepocet_password | urlencode)) | quote | replace('%', '\\%') }};
+      fi
 
 - name: Run SQL import
   import_role:
