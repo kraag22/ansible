@@ -17,3 +17,13 @@ serosvet.cz, www.serosvet.cz {
   }
   tls {{ tls_email }}
 }
+
+www.berlingame.cz, berlingame.cz {
+  reverse_proxy /* 127.0.0.1:{{ berlingame_service_port }}
+  encode gzip
+  log {
+    format console
+    output file {{ caddy_log_dir }}/berlingame.log
+  }
+  tls {{ tls_email }}
+}

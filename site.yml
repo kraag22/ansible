@@ -34,9 +34,6 @@
     - role: blog
       tags: blog
 
-    - role: berlingame
-      tags: berlingame
-
     - role: net-worth
       tags: net-worth
 
@@ -70,6 +67,9 @@
 
     - role: quests
       tags: quests
+
+    - role: berlingame
+      tags: berlingame
 
 - hosts: diblik
   gather_facts: true
