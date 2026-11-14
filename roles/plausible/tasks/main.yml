@@ -1,17 +1,14 @@
 ---
-- name: Clone plausible docker repo
-  git:
-    repo: "https://github.com/plausible/hosting"
-    dest: "{{ plausible_install_dir }}"
-    force: yes
-  
-- name: Change owner
+- name: Create plausible directories
   file:
-    path: "{{ plausible_install_dir }}"
+    path: "{{ item }}"
+    state: directory
     owner: "{{ admin_username }}"
     group: "{{ admin_username }}"
-    recurse: yes
-    state: directory
+    mode: "0755"
+  loop:
+    - "{{ plausible_install_dir }}"
+    - "{{ plausible_install_dir }}/clickhouse"
 
 - name: Template out plausible dotenv
   template:
@@ -19,11 +16,7 @@
     dest: "{{ plausible_install_dir }}/plausible-conf.env"
     owner: "{{ admin_username }}"
     group: "{{ admin_username }}"
-
-- name: Stop plausible docker stack
-  shell:
-    chdir: "{{ plausible_install_dir }}"
-    cmd: "docker-compose down"
+    mode: "0600"
 
 - name: Template out plausible docker-compose
   template:
@@ -31,15 +24,23 @@
     dest: "{{ plausible_install_dir }}/docker-compose.yml"
     owner: "{{ admin_username }}"
     group: "{{ admin_username }}"
+    mode: "0600"
 
 - name: Copy clickhouse config
   copy:
-    src: "clickhouse-config.xml"
-    dest: "{{ plausible_install_dir }}/clickhouse/clickhouse-config.xml"
+    src: "{{ item }}"
+    dest: "{{ plausible_install_dir }}/clickhouse/{{ item }}"
     owner: "{{ admin_username }}"
     group: "{{ admin_username }}"
+    mode: "0644"
+  loop:
+    - clickhouse-config.xml
+    - clickhouse-user-config.xml
 
+# Compose recreates only the containers whose configuration changed.
 - name: Start plausible docker stack
-  shell:
+  command: docker compose up -d
+  args:
     chdir: "{{ plausible_install_dir }}"
-    cmd: "docker-compose up -d"
+  register: plausible_compose_up
+  changed_when: "'Started' in plausible_compose_up.stderr or 'Created' in plausible_compose_up.stderr"

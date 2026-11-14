@@ -2,3 +2,6 @@
 admin_username: "kraag22"
 plausible_install_dir: "/srv/plausible"
 clickhouse_version: "21.3"
+# Pinned to the image production runs; a newer release needs a staged upgrade
+# of the application, ClickHouse and the compose file together.
+plausible_image: "plausible/analytics@sha256:20204bfc253cfab31e1f6c41c321c8a1437bd4a585a3f13393b5e0449b6d8698"

@@ -1,4 +1,3 @@
-version: "3.3"
 services:
   plausible_db:
     image: postgres:12
@@ -26,7 +25,7 @@ services:
       - CLICKHOUSE_DATABASE_PASSWORD=
 
   plausible:
-    image: plausible/analytics:latest
+    image: {{ plausible_image }}
     restart: always
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh db init-admin && /entrypoint.sh run"
     depends_on:

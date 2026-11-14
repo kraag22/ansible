@@ -17,25 +17,3 @@ www.fazilion.com, fazilion.com {
   }
   tls {{ tls_email }}
 }
-
-www.kraag22.com, kraag22.com {
-  tls {{ tls_email }}
-  root * {{ blog_path }}
-  file_server
-  try_files {path}.html {path}
-  encode gzip
-  log {
-    format console
-    output file {{ caddy_log_dir }}/kraag22.log
-  }
-}
-
-plausible.kraag22.com {
-  reverse_proxy /* 127.0.0.1:5000
-  encode gzip
-  log {
-    format console
-    output file {{ caddy_log_dir }}/plausible.log
-  }
-  tls {{ tls_email }}
-}

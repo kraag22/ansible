@@ -28,17 +28,11 @@
     - role: nodejs
       tags: node
 
-    - role: blog
-      tags: blog
-
     - role: net-worth
       tags: net-worth
 
     - role: drevenak
       tags: drevenak
-
-    - role: plausible
-      tags: plausible
 
 - hosts: hetzner
   gather_facts: true
@@ -70,6 +64,12 @@
 
     - role: graphs
       tags: graphs
+
+    - role: blog
+      tags: blog
+
+    - role: plausible
+      tags: plausible
 
 - hosts: diblik
   gather_facts: true
