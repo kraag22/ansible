@@ -1,7 +1,9 @@
 ---
 admin_username: "kraag22"
 plausible_install_dir: "/srv/plausible"
-clickhouse_version: "21.3"
-# Pinned to the image production runs; a newer release needs a staged upgrade
-# of the application, ClickHouse and the compose file together.
-plausible_image: "plausible/analytics@sha256:20204bfc253cfab31e1f6c41c321c8a1437bd4a585a3f13393b5e0449b6d8698"
+# Versions follow the compose file of plausible/community-edition for this release.
+plausible_image: "ghcr.io/plausible/community-edition:v3.2.1"
+plausible_clickhouse_image: "clickhouse/clickhouse-server:24.12-alpine"
+plausible_postgres_image: "postgres:16-alpine"
+# Encrypts 2FA secrets at rest; must stay the same across deploys.
+plausible_totp_vault_key: "{{ plausible_totp_vault_key }}"

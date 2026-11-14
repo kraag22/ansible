@@ -34,8 +34,10 @@
     group: "{{ admin_username }}"
     mode: "0644"
   loop:
-    - clickhouse-config.xml
-    - clickhouse-user-config.xml
+    - logs.xml
+    - ipv4-only.xml
+    - low-resources.xml
+    - default-profile-low-resources-overrides.xml
 
 # Compose recreates only the containers whose configuration changed.
 - name: Start plausible docker stack
