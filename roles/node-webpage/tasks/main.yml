@@ -28,8 +28,8 @@
     group: "{{ node_webpage_group }}"
     mode: "0700"
   when:
-    - node_webpage_git_repository is defined
-    - node_webpage_git_deploy_key is defined
+    - node_webpage_git_repository | default('') | length > 0
+    - node_webpage_git_deploy_key | default('') | length > 0
 
 - name: Install repository deploy key
   copy:
@@ -40,14 +40,14 @@
     mode: "0600"
   no_log: true
   when:
-    - node_webpage_git_repository is defined
-    - node_webpage_git_deploy_key is defined
+    - node_webpage_git_repository | default('') | length > 0
+    - node_webpage_git_deploy_key | default('') | length > 0
 
 - name: Ensure rsync is installed
   package:
     name: rsync
     state: present
-  when: node_webpage_git_repository is defined
+  when: node_webpage_git_repository | default('') | length > 0
 
 - name: Create parent directory for staged repository checkout
   file:
@@ -56,7 +56,7 @@
     owner: "{{ node_webpage_user }}"
     group: "{{ node_webpage_group }}"
     mode: "0755"
-  when: node_webpage_git_repository is defined
+  when: node_webpage_git_repository | default('') | length > 0
 
 - name: Update the staged repository checkout
   git:
@@ -66,10 +66,10 @@
     update: yes
     force: yes
     accept_hostkey: "{{ node_webpage_git_accept_hostkey }}"
-    key_file: "{{ node_webpage_git_key_file if node_webpage_git_deploy_key is defined else omit }}"
+    key_file: "{{ node_webpage_git_key_file if (node_webpage_git_deploy_key | default('') | length > 0) else omit }}"
   become: yes
   become_user: "{{ node_webpage_user }}"
-  when: node_webpage_git_repository is defined
+  when: node_webpage_git_repository | default('') | length > 0
 
 - name: Synchronize repository files into application directory
   command:
@@ -79,7 +79,7 @@
       - --exclude=.git/
       - "{{ node_webpage_git_checkout_path }}/"
       - "{{ node_webpage_root }}/"
-  when: node_webpage_git_repository is defined
+  when: node_webpage_git_repository | default('') | length > 0
 
 - name: Creates web directory
   file:
@@ -147,7 +147,7 @@
     chdir: "{{ node_webpage_path }}"
   become: yes
   become_user: "{{ node_webpage_user }}"
-  when: install_npm_deps is defined
+  when: install_npm_deps | default(false) | bool
 
 - name: Start service
   systemd:

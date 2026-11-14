@@ -1,4 +1,12 @@
 ---
+# Ubuntu 24.04 renamed these two libraries with a t64 suffix.
+- name: Install packages required by puppeteer (headless chrome)
+  apt:
+    name: "{{ chrome_headless_dependencies | map('regex_replace', '^(libasound2|libcups2)$', '\\1' ~ net_worth_t64_suffix) | list }}"
+    state: present
+  vars:
+    net_worth_t64_suffix: "{{ 't64' if ansible_facts['distribution_version'] is version('24.04', '>=') else '' }}"
+
 - import_role:
     name: node-webpage
     vars_from: "net-worth"

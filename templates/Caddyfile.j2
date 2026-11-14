@@ -7,13 +7,3 @@ www.berlingame.cz, berlingame.cz {
   }
   tls {{ tls_email }}
 }
-
-www.fazilion.com, fazilion.com {
-  reverse_proxy /* 127.0.0.1:4000
-  encode gzip
-  log {
-    format console
-    output file {{ caddy_log_dir }}/fazilion.log
-  }
-  tls {{ tls_email }}
-}

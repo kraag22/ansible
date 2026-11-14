@@ -59,3 +59,13 @@ plausible.kraag22.com {
   }
   tls {{ tls_email }}
 }
+
+www.fazilion.com, fazilion.com {
+  reverse_proxy /* 127.0.0.1:{{ net_worth_service_port }}
+  encode gzip
+  log {
+    format console
+    output file {{ caddy_log_dir }}/fazilion.log
+  }
+  tls {{ tls_email }}
+}

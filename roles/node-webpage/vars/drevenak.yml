@@ -8,3 +8,8 @@ node_webpage_group: "{{ drevenak_group }}"
 node_webpage_service_name: drevenak
 node_webpage_service_port: "{{ drevenak_service_port }}"
 node_webpage_db_file_name: database.sqlite
+# Role vars stay visible to later roles in the same play, so set these
+# explicitly; otherwise another site's repository settings leak in here.
+node_webpage_git_repository: ""
+node_webpage_git_deploy_key: ""
+install_npm_deps: false

@@ -9,3 +9,4 @@ node_webpage_service_port: "4100"
 node_webpage_db_file_name: reality.db
 node_webpage_git_repository: https://github.com/kraag22/net-worth.git
 install_npm_deps: true
+node_webpage_git_deploy_key: ""

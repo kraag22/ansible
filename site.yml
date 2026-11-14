@@ -28,9 +28,6 @@
     - role: nodejs
       tags: node
 
-    - role: net-worth
-      tags: net-worth
-
     - role: drevenak
       tags: drevenak
 
@@ -70,6 +67,9 @@
 
     - role: plausible
       tags: plausible
+
+    - role: net-worth
+      tags: net-worth
 
 - hosts: diblik
   gather_facts: true
