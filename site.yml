@@ -28,9 +28,6 @@
     - role: nodejs
       tags: node
 
-    - role: graphs
-      tags: graphs
-
     - role: blog
       tags: blog
 
@@ -70,6 +67,9 @@
 
     - role: berlingame
       tags: berlingame
+
+    - role: graphs
+      tags: graphs
 
 - hosts: diblik
   gather_facts: true

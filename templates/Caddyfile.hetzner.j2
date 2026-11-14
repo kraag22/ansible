@@ -27,3 +27,13 @@ www.berlingame.cz, berlingame.cz {
   }
   tls {{ tls_email }}
 }
+
+www.gamarna.cz, gamarna.cz {
+  tls {{ tls_email }}
+  reverse_proxy /* 127.0.0.1:{{ graphs_service_port }}
+  encode gzip
+  log {
+    format console
+    output file {{ caddy_log_dir }}/gamarna.log
+  }
+}
