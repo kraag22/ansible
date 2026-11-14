@@ -59,3 +59,21 @@
     state: present
     virtualenv: /opt/pyenv
     virtualenv_command: python3 -m venv
+
+# cron runs with a minimal PATH; dpkg needs the sbin directories.
+# The host cron daemon uses the host timezone.
+- name: Setup cron job for nightly Ubuntu update
+  ansible.builtin.cron:
+    name: "nightly ubuntu update"
+    user: root
+    minute: "0"
+    hour: "1"
+    job: >-
+      export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      DEBIAN_FRONTEND=noninteractive;
+      (apt-get update -q &&
+      apt-get upgrade --with-new-pkgs -y -q
+      -o DPkg::Lock::Timeout=600
+      -o Dpkg::Options::=--force-confdef
+      -o Dpkg::Options::=--force-confold)
+      > /var/log/nightly-ubuntu-update.log 2>&1
