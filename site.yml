@@ -1,5 +1,5 @@
 ---
-- hosts: ocean, hetzner
+- hosts: hetzner
   remote_user: root
   gather_facts: false
   vars_files: "./variables/settings.yml"
@@ -8,28 +8,6 @@
       vars:
         create_user: kraag22
       tags: setup
-
-- hosts: ocean
-  gather_facts: true
-  vars_files: "./variables/settings.yml"
-  become: true
-  roles:
-    - role: caddy-ansible
-      vars:
-        caddy_home: /srv/caddy
-        caddy_log_dir: /var/log/caddy
-        caddy_log_file: "{{ caddy_log_dir }}/caddy.log"
-        caddy_systemd_restart: "on-success"
-        caddy_systemd_capabilities_enabled: true
-        tls_email: "{{ email_address }}"
-        caddy_config: "{{ lookup('template', 'templates/Caddyfile.j2') }}"
-      tags: caddy
-
-    - role: nodejs
-      tags: node
-
-    - role: drevenak
-      tags: drevenak
 
 - hosts: hetzner
   gather_facts: true
