@@ -62,6 +62,9 @@
 
 # cron runs with a minimal PATH; dpkg needs the sbin directories.
 # The host cron daemon uses the host timezone.
+# Reboots only when the upgrade succeeded and Ubuntu flags it as needed
+# (kernel, libc, ...). All app services are enabled systemd units or
+# restart: always containers, so they come back on boot.
 - name: Setup cron job for nightly Ubuntu update
   ansible.builtin.cron:
     name: "nightly ubuntu update"
@@ -75,5 +78,9 @@
       apt-get upgrade --with-new-pkgs -y -q
       -o DPkg::Lock::Timeout=600
       -o Dpkg::Options::=--force-confdef
-      -o Dpkg::Options::=--force-confold)
+      -o Dpkg::Options::=--force-confold &&
+      if [ -f /var/run/reboot-required ]; then
+      echo "reboot required by:"; cat /var/run/reboot-required.pkgs;
+      shutdown -r +1 "nightly update reboot";
+      fi)
       > /var/log/nightly-ubuntu-update.log 2>&1
