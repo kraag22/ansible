@@ -93,6 +93,26 @@
       wget -O /dev/null {{ ('http://localhost:' ~ berlingame_service_port ~ '/prepocet.php?heslo=' ~ (prepocet_password | urlencode)) | quote | replace('%', '\\%') }};
       fi
 
+- name: Install nightly PHP image update script
+  template:
+    src: update-php.sh.j2
+    dest: /usr/local/bin/berlingame-update-php
+    owner: root
+    group: root
+    mode: 0755
+
+# Runs after the 01:00 nightly apt upgrade from the setup role.
+- name: Nightly PHP image update
+  ansible.builtin.cron:
+    name: berlingame php update
+    minute: "0"
+    hour: "3"
+    user: root
+    job: >-
+      PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      /usr/local/bin/berlingame-update-php
+      >> /var/log/berlingame-update-php.log 2>&1
+
 - name: Run SQL import
   import_role:
     name: berlingame
