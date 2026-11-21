@@ -1,21 +1,21 @@
 #!/bin/sh
-# Nightly rebuild of the berlingame PHP image with a freshly pulled base image.
-# Restarts the service only when the rebuilt image differs from the current one.
+# Rebuild PHP and reconcile the running container, even after a missed update.
 set -eu
 
 cd {{ compose_path | quote }}
 
-image=$(docker compose config --images server)
-old_id=$(docker image inspect --format '{% raw %}{{.Id}}{% endraw %}' "$image" 2>/dev/null || true)
-
 docker compose build --pull --quiet server
+docker compose up -d --no-deps server
 
-new_id=$(docker image inspect --format '{% raw %}{{.Id}}{% endraw %}' "$image")
-
-if [ "$old_id" != "$new_id" ]; then
-    echo "$(date -Is) PHP image changed ($old_id -> $new_id), restarting berlingame"
-    systemctl restart berlingame
-    docker image prune -f
-else
-    echo "$(date -Is) PHP image unchanged"
+image=$(docker compose config --images server)
+container=$(docker compose ps -q server)
+test -n "$container"
+expected=$(docker image inspect --format '{% raw %}{{.Id}}{% endraw %}' "$image")
+actual=$(docker inspect --format '{% raw %}{{.Image}}{% endraw %}' "$container")
+if [ "$actual" != "$expected" ]; then
+    echo "PHP image update failed: running $actual, expected $expected" >&2
+    exit 1
 fi
+
+echo "$(date -Is) PHP container uses $actual"
+docker image prune -f

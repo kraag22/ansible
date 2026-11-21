@@ -69,7 +69,6 @@
     chdir: "{{ compose_path }}"
   when: berlingame_checkout.changed or berlingame_compose.changed or berlingame_unit.changed
   changed_when: true
-  notify: restart berlingame
 
 - name: Apply service changes before continuing
   meta: flush_handlers
@@ -79,6 +78,29 @@
     name: berlingame
     state: started
     enabled: true
+
+# Reconcile even when the checkout/build was unchanged: a previous deployment
+# may have built an image without replacing its running container.
+- name: Apply current PHP image
+  command: docker compose up -d --no-deps server
+  args:
+    chdir: "{{ compose_path }}"
+  register: berlingame_php_up
+  changed_when: "'Created' in berlingame_php_up.stderr or 'Recreated' in berlingame_php_up.stderr or 'Started' in berlingame_php_up.stderr"
+
+- name: Verify running PHP image matches built image
+  shell: |
+    set -eu
+    image=$(docker compose config --images server)
+    container=$(docker compose ps -q server)
+    test -n "$container"
+    expected=$(docker image inspect --format '{{ '{{.Id}}' }}' "$image")
+    actual=$(docker inspect --format '{{ '{{.Image}}' }}' "$container")
+    test "$actual" = "$expected"
+  args:
+    chdir: "{{ compose_path }}"
+  changed_when: false
+  when: not ansible_check_mode
 
 # Check Prague time explicitly; the host cron daemon uses the host timezone.
 # Escape % because cron treats an unescaped % as a newline, even inside quotes.

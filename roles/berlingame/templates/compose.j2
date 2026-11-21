@@ -1,8 +1,7 @@
-version: '3.2'
-
 services:
 
     db:
+        restart: unless-stopped
         image: mysql:5.7
         environment:
             MYSQL_ROOT_PASSWORD: {{ berlingame_mysql_password }}
@@ -10,11 +9,13 @@ services:
           - /srv/berlingame/mysql:/var/lib/mysql
 
     adminer:
+        restart: unless-stopped
         image: adminer
         ports:
           - 8080:8080
 
     server:
+        restart: unless-stopped
         build: /srv/berlingame/docker/php-mysql
         ports:
           - {{ berlingame_service_port }}:80
